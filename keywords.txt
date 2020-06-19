@@ -1,4 +1,4 @@
-# Syntax Coloring Map For AnalogKeypad
+# Syntax Coloring Map For SHT31
 
 # Datatypes (KEYWORD1)
 SHT31	KEYWORD1
