@@ -1,7 +1,7 @@
 //
 //    FILE: SHT31.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.0
+// VERSION: 0.2.1
 //    DATE: 2019-02-08
 // PURPOSE: Arduino library for the SHT31 temperature and humidity sensor
 //          https://www.adafruit.com/product/2857
@@ -15,7 +15,7 @@
 //                    stable version
 // 0.2.0   2020-05-12 made humidity & temperature private;
 //                    support ESP32 I2C
-//
+// 0.2.1   2020-06-19 fix library.json
 
 
 #include "SHT31.h"
