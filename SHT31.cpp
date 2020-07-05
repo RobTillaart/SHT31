@@ -1,7 +1,7 @@
 //
 //    FILE: SHT31.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.1
+// VERSION: 0.2.2
 //    DATE: 2019-02-08
 // PURPOSE: Arduino library for the SHT31 temperature and humidity sensor
 //          https://www.adafruit.com/product/2857
@@ -16,6 +16,7 @@
 // 0.2.0   2020-05-12 made humidity & temperature private;
 //                    support ESP32 I2C
 // 0.2.1   2020-06-19 fix library.json
+// 0.2.2   2020-07-05 fix compiling for ESP
 
 
 #include "SHT31.h"
@@ -134,7 +135,8 @@ void SHT31::reset(bool hard)
 
 void SHT31::setHeatTimeout(uint8_t seconds)
 {
-  _heatTimeOut = min(180, seconds);
+  _heatTimeOut = seconds;
+  if (_heatTimeOut > 180) _heatTimeOut = 180;
 }
 
 void SHT31::heatOn()
