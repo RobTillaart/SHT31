@@ -3,7 +3,7 @@
 //  AUTHOR: Rob Tillaart
 // VERSION: 0.0.2
 // PURPOSE: demo async interface
-//
+//     URL: https://github.com/RobTillaart/SHT31
 
 #include "Wire.h"
 #include "SHT31.h"
