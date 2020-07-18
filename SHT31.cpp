@@ -176,6 +176,15 @@ bool SHT31::readData(bool fast)
   uint8_t buffer[6];
   readBytes(6, (uint8_t*) &buffer[0]);
 
+  if (!fast)
+  {
+    if (buffer[2] != crc8(buffer, 2) ||
+        buffer[5] != crc8(buffer + 3, 2)) 
+	{
+      return false;
+	}
+  }
+
   uint16_t raw = (buffer[0] << 8) + buffer[1];
   temperature = raw * (175.0 / 65535) - 45;
   raw = (buffer[3] << 8) + buffer[4];
@@ -183,15 +192,28 @@ bool SHT31::readData(bool fast)
 
   _lastRead = millis();
 
-  if (!fast)
-  {
-    // TODO check CRC here
-    // TODO rv = false;
-  }
   return true;
 }
 
 //////////////////////////////////////////////////////////
+
+uint8_t SHT31::crc8(const uint8_t *data, int len) 
+{
+  // CRC-8 formula from page 14 of SHT spec pdf
+  const uint8_t POLY(0x31);
+  uint8_t crc(0xFF);
+
+  for (int j = len; j; --j) 
+  {
+    crc ^= *data++;
+
+    for (int i = 8; i; --i) 
+	{
+      crc = (crc & 0x80) ? (crc << 1) ^ POLY : (crc << 1);
+    }
+  }
+  return crc;
+}
 
 void SHT31::writeCmd(uint16_t cmd)
 {
