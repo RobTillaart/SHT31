@@ -62,6 +62,7 @@ public:
   bool readData(bool fast = true);
 
 private:
+  uint8_t crc8(const uint8_t *data, int len);
   void writeCmd(uint16_t cmd);
   void readBytes(uint8_t n, uint8_t *val);
   TwoWire* _wire;
