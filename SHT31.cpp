@@ -180,9 +180,9 @@ bool SHT31::readData(bool fast)
   {
     if (buffer[2] != crc8(buffer, 2) ||
         buffer[5] != crc8(buffer + 3, 2)) 
-	{
+    {
       return false;
-	}
+    }
   }
 
   uint16_t raw = (buffer[0] << 8) + buffer[1];
@@ -208,7 +208,7 @@ uint8_t SHT31::crc8(const uint8_t *data, int len)
     crc ^= *data++;
 
     for (int i = 8; i; --i) 
-	{
+    {
       crc = (crc & 0x80) ? (crc << 1) ^ POLY : (crc << 1);
     }
   }

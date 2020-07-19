@@ -66,7 +66,7 @@ private:
   void writeCmd(uint16_t cmd);
   void readBytes(uint8_t n, uint8_t *val);
   TwoWire* _wire;
-	
+
   uint8_t   _addr;
   uint8_t   _heatTimeOut;   // seconds
   uint32_t  _lastRead;
