@@ -33,8 +33,8 @@ void setup()
   {
     stat = sht.readStatus();
     printHeaterStatus(stat);
-	sht.read();
-	Serial.println(sht.getTemperature());
+    sht.read();
+    Serial.println(sht.getTemperature());
     delay(10000);
   }
 

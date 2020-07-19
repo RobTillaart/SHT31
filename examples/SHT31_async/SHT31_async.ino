@@ -38,19 +38,26 @@ void loop()
   if (sht.dataReady())
   {
     start = micros();
-    sht.readData();         // default = true = fast       slow = false
+    bool success  = sht.readData();   // default = true = fast
     stop = micros();
-    sht.requestData();      // request for next sample
-		
+    sht.requestData();                // request for next sample
+
     Serial.print("\t");
     Serial.print(stop - start);
     Serial.print("\t");
-    Serial.print(sht.getTemperature(), 1);
-    Serial.print("\t");
-    Serial.print(sht.getHumidity(), 1);
-    Serial.print("\t");
-    Serial.println(cnt);
-	cnt = 0;
+    if (success  == false)
+    {
+      Serial.println("Failed read");
+    }
+    else
+    {
+      Serial.print(sht.getTemperature(), 1);
+      Serial.print("\t");
+      Serial.print(sht.getHumidity(), 1);
+      Serial.print("\t");
+      Serial.println(cnt);
+      cnt = 0;
+    }
   }
   cnt++; // simulate activity
 }
