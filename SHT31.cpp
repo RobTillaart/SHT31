@@ -1,7 +1,7 @@
 //
 //    FILE: SHT31.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.2
+// VERSION: 0.2.3
 //    DATE: 2019-02-08
 // PURPOSE: Arduino library for the SHT31 temperature and humidity sensor
 //          https://www.adafruit.com/product/2857
@@ -17,6 +17,8 @@
 //                    support ESP32 I2C
 // 0.2.1   2020-06-19 fix library.json
 // 0.2.2   2020-07-05 fix compiling for ESP
+// 0.2.3   2020-07-19 added CRC by PetrDa (thanks); cleanup
+//
 
 
 #include "SHT31.h"
@@ -28,8 +30,8 @@
 #define SHT31_SOFT_RESET        0x30A2
 #define SHT31_HARD_RESET        0x0006
 
-#define SHT31_MEASUREMENT_FAST  0x2416	// page 10 datasheet
-#define SHT31_MEASUREMENT_SLOW  0x2400	// no clock stretching
+#define SHT31_MEASUREMENT_FAST  0x2416    // page 10 datasheet
+#define SHT31_MEASUREMENT_SLOW  0x2400    // no clock stretching
 
 #define SHT31_HEAT_ON           0x306D
 #define SHT31_HEAT_OFF          0x3066
@@ -197,17 +199,17 @@ bool SHT31::readData(bool fast)
 
 //////////////////////////////////////////////////////////
 
-uint8_t SHT31::crc8(const uint8_t *data, int len) 
+uint8_t SHT31::crc8(const uint8_t *data, uint8_t len) 
 {
   // CRC-8 formula from page 14 of SHT spec pdf
   const uint8_t POLY(0x31);
   uint8_t crc(0xFF);
 
-  for (int j = len; j; --j) 
+  for (uint8_t j = len; j; --j) 
   {
     crc ^= *data++;
 
-    for (int i = 8; i; --i) 
+    for (uint8_t i = 8; i; --i) 
     {
       crc = (crc & 0x80) ? (crc << 1) ^ POLY : (crc << 1);
     }
