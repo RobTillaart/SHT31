@@ -2,7 +2,7 @@
 //
 //    FILE: SHT31.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.3
+// VERSION: 0.2.4
 //    DATE: 2019-02-08
 // PURPOSE: Arduino library for the SHT31 temperature and humidity sensor
 //          https://www.adafruit.com/product/2857
@@ -36,6 +36,9 @@ public:
 
   // blocks 15 milliseconds + actual read + math
   bool read(bool fast = true);
+
+  // check senosr is reachable over I2C
+  bool isConnected();
 
   // details see datasheet; summary in SHT31.cpp file
   uint16_t readStatus();
