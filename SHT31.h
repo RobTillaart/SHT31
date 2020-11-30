@@ -12,7 +12,7 @@
 #include "Arduino.h"
 #include "Wire.h"
 
-#define SHT31_LIB_VERSION "0.2.3"
+#define SHT31_LIB_VERSION "0.2.4"
 
 // fields readStatus
 #define SHT31_STATUS_ALERT_PENDING    (1 << 15)
