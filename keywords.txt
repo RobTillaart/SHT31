@@ -6,6 +6,7 @@ SHT31	KEYWORD1
 # Methods and Functions (KEYWORD2)
 begin	KEYWORD2
 read	KEYWORD2
+isConnected	KEYWORD2
 readStatus	KEYWORD2
 lastRead	KEYWORD2
 reset	KEYWORD2

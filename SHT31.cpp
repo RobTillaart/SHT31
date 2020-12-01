@@ -1,7 +1,7 @@
 //
 //    FILE: SHT31.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.3
+// VERSION: 0.2.4
 //    DATE: 2019-02-08
 // PURPOSE: Arduino library for the SHT31 temperature and humidity sensor
 //          https://www.adafruit.com/product/2857
@@ -18,7 +18,7 @@
 // 0.2.1   2020-06-19 fix library.json
 // 0.2.2   2020-07-05 fix compiling for ESP
 // 0.2.3   2020-07-19 added CRC by PetrDa (thanks); cleanup
-//
+// 0.2.4   2020-11-29 added isConnected()
 
 
 #include "SHT31.h"
@@ -84,6 +84,13 @@ bool SHT31::read(bool fast)
   writeCmd(fast ? SHT31_MEASUREMENT_FAST : SHT31_MEASUREMENT_SLOW);
   delay(fast ? 4 : 15); // table 4 datasheet
   return readData(fast);
+}
+
+bool SHT31::isConnected()
+{
+  _wire->beginTransmission(_addr);
+  int rv = _wire->endTransmission();
+  return (rv == 0);
 }
 
 uint16_t SHT31::readStatus()
