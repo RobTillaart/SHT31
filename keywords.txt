@@ -13,7 +13,7 @@ reset	KEYWORD2
 setHeatTimeout	KEYWORD2
 heatOn	KEYWORD2
 heatOff	KEYWORD2
-heatUp	KEYWORD2
+isHeaterOn	KEYWORD2
 getHumidity	KEYWORD2
 getTemperature	KEYWORD2
 requestData	KEYWORD2

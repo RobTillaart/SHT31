@@ -1,7 +1,7 @@
 //
 //    FILE: SHT31.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.4
+// VERSION: 0.2.5
 //    DATE: 2019-02-08
 // PURPOSE: Arduino library for the SHT31 temperature and humidity sensor
 //          https://www.adafruit.com/product/2857
@@ -19,6 +19,7 @@
 // 0.2.2   2020-07-05 fix compiling for ESP
 // 0.2.3   2020-07-19 added CRC by PetrDa (thanks); cleanup
 // 0.2.4   2020-11-29 added isConnected()
+// 0.2.5   2020-12-02 added isHeaterOn() + unittest + arduino-ci
 
 
 #include "SHT31.h"
@@ -49,7 +50,10 @@ SHT31::SHT31()
 #if defined(ESP8266) || defined(ESP32)
 bool SHT31::begin(const uint8_t address, const uint8_t dataPin, const uint8_t clockPin)
 {
-  if (address != 0x44 && address != 0x45) return false;
+  if ((address != 0x44) && (address != 0x45))
+  {
+    return false;
+  }
   _addr = address;
 
   _wire = &Wire;
@@ -71,7 +75,10 @@ bool SHT31::begin(const uint8_t address)
 
 bool SHT31::begin(const uint8_t address,  TwoWire *wire)
 {
-  if (address != 0x44 && address != 0x45) return false;
+  if ((address != 0x44) && (address != 0x45))
+  {
+    return false;
+  }
   _addr = address;
   _wire = wire;
   _wire->begin();
@@ -93,6 +100,36 @@ bool SHT31::isConnected()
   return (rv == 0);
 }
 
+#ifdef doc
+// bit - description
+// ==================
+// 15 Alert pending status
+//    '0': no pending alerts
+//    '1': at least one pending alert - default
+// 14 Reserved ‘0’
+// 13 Heater status
+//    '0’ : Heater OFF - default
+//    '1’ : Heater ON
+// 12 Reserved '0’
+// 11 Humidity tracking alert
+//    '0’ : no alert - default
+//    '1’ : alert
+// 10 Temp tracking alert
+//    '0’ : no alert - default
+//    '1’ : alert
+// 9:5 Reserved '00000’
+// 4 System reset detected
+//    '0': no reset since last ‘clear status register’ command
+//    '1': reset detected (hard or soft reset command or supply fail) - default
+// 3:2 Reserved ‘00’
+// 1 Command status
+//    '0': last cmd executed successfully
+//    '1': last cmd not processed. Invalid or failed checksum
+// 0 Write data checksum status
+//    '0': checksum of last write correct
+//    '1': checksum of last write transfer failed
+#endif
+
 uint16_t SHT31::readStatus()
 {
   uint32_t status = 0;
@@ -101,34 +138,6 @@ uint16_t SHT31::readStatus()
   // TODO CRC check
 
   return (uint16_t) (status >> 8);
-
-  // bit - description
-  // ==================
-  // 15 Alert pending status
-  //    '0': no pending alerts
-  //    '1': at least one pending alert - default
-  // 14 Reserved ‘0’
-  // 13 Heater status
-  //    '0’ : Heater OFF - default
-  //    '1’ : Heater ON
-  // 12 Reserved '0’
-  // 11 Humidity tracking alert
-  //    '0’ : no alert - default
-  //    '1’ : alert
-  // 10 Temp tracking alert
-  //    '0’ : no alert - default
-  //    '1’ : alert
-  // 9:5 Reserved '00000’
-  // 4 System reset detected
-  //    '0': no reset since last ‘clear status register’ command
-  //    '1': reset detected (hard or soft reset command or supply fail) - default
-  // 3:2 Reserved ‘00’
-  // 1 Command status
-  //    '0': last cmd executed successfully
-  //    '1': last cmd not processed. Invalid or failed checksum
-  // 0 Write data checksum status
-  //    '0': checksum of last write correct
-  //    '1': checksum of last write transfer failed
 }
 
 void SHT31::reset(bool hard)
@@ -160,12 +169,18 @@ void SHT31::heatOff()
   _heaterStart = 0;
 }
 
-bool SHT31::heatUp()
+bool SHT31::isHeaterOn()
 {
-  if (_heaterStart == 0) return false;
+  if (_heaterStart == 0)
+  {
+    return false;
+  }
   // did not exceed time out
-  if (millis() - _heaterStart < (_heatTimeOut * 1000UL)) return true;
-  heatOff();
+  if (millis() - _heaterStart < (_heatTimeOut * 1000UL))
+  {
+    return true;
+  }
+  heatOff();     // should this be done here?
   return false;
 }
 
@@ -187,8 +202,11 @@ bool SHT31::readData(bool fast)
 
   if (!fast)
   {
-    if (buffer[2] != crc8(buffer, 2) ||
-        buffer[5] != crc8(buffer + 3, 2)) 
+    if (buffer[2] != crc8(buffer, 2)) 
+    {
+      return false;
+    }
+    if (buffer[5] != crc8(buffer + 3, 2)) 
     {
       return false;
     }
