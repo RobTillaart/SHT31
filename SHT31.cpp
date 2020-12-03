@@ -42,11 +42,12 @@
 
 SHT31::SHT31()
 {
-  _addr = 0;
-  _lastRead = 0;
-  temperature = 0;
-  humidity = 0;
+  _addr        = 0;
+  _lastRead    = 0;
+  temperature  = 0;
+  humidity     = 0;
   _heaterStart = 0;
+  _error       = SHT31_OK;
 }
 
 #if defined(ESP8266) || defined(ESP32)
