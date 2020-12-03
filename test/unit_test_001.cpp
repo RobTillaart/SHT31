@@ -34,7 +34,7 @@
 #include "Arduino.h"
 #include "SHT31.h"
 
-uint8_t expect;
+int expect;
 
 unittest_setup()
 {
@@ -123,7 +123,7 @@ unittest(test_async)
   bool b = sht.begin(0x44);
   assertEqual(b, true);
   
-  assertFalse(sht.requestData());
+  assertTrue(sht.requestData());
   expect = SHT31_OK;
   assertEqual(expect, sht.getError());
 
