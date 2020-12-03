@@ -25,6 +25,8 @@
   most unit tests will test for fail 
   as there is no sensor connected
   and there is no mockup.
+  
+  It appears that Wire.write does not fail without sensor...
 */
 
 #include <ArduinoUnitTests.h>
@@ -32,6 +34,7 @@
 #include "Arduino.h"
 #include "SHT31.h"
 
+uint8_t expect;
 
 unittest_setup()
 {
@@ -48,7 +51,9 @@ unittest(test_begin)
   bool b = sht.begin(0x44);
   assertEqual(b, true);
 
-  assertFalse(sht.reset());
+  assertTrue(sht.reset());
+  expect = SHT31_OK;
+  assertEqual(expect, sht.getError());
 
   Serial.println(sht.getTemperature());
   Serial.println(sht.getHumidity());
@@ -65,18 +70,21 @@ unittest(test_read)
   bool b = sht.begin(0x44);
   assertEqual(b, true);
 
-  assertFalse(sht.isConnected());
-  assertEqual(SHT31_ERR_NOT_CONNECT, sht.getError());
+  assertTrue(sht.isConnected());
+  expect = SHT31_OK;
+  assertEqual(expect, sht.getError());
 
   assertFalse(sht.read());
-  assertEqual(SHT31_OK, sht.getError());
+  expect = SHT31_OK;
+  assertEqual(expect, sht.getError());
 
   assertFalse(sht.read(false));
-  assertEqual(SHT31_OK, sht.getError());
+  expect = SHT31_OK;
+  assertEqual(expect, sht.getError());
 
   assertFalse(sht.read(true));
-  assertEqual(SHT31_OK, sht.getError());
-  
+  expect = SHT31_OK;
+  assertEqual(expect, sht.getError());
 }
 
 unittest(test_readStatus)
@@ -86,7 +94,8 @@ unittest(test_readStatus)
   assertEqual(b, true);
   
   assertEqual(0xFFFF, sht.readStatus());
-  assertEqual(SHT31_ERR_NOT_CONNECT, sht.getError());
+  expect = SHT31_ERR_NOT_CONNECT;
+  assertEqual(expect, sht.getError());
 }
 
 unittest(test_heater)
@@ -96,13 +105,16 @@ unittest(test_heater)
   assertEqual(b, true);
   
   assertFalse(sht.heatOn());
-  assertEqual(SHT31_OK, sht.getError());
+  expect = SHT31_ERR_NOT_CONNECT;
+  assertEqual(expect, sht.getError());
 
   assertTrue(sht.heatOff());
-  assertEqual(SHT31_OK, sht.getError());
+  expect = SHT31_ERR_NOT_CONNECT;
+  assertEqual(expect, sht.getError());
 
   assertFalse(sht.isHeaterOn());
-  assertEqual(SHT31_OK, sht.getError());
+  expect = SHT31_ERR_NOT_CONNECT;
+  assertEqual(expect, sht.getError());
 }
 
 unittest(test_async)
@@ -112,19 +124,24 @@ unittest(test_async)
   assertEqual(b, true);
   
   assertFalse(sht.requestData());
-  assertEqual(SHT31_OK, sht.getError());
+  expect = SHT31_OK;
+  assertEqual(expect, sht.getError());
 
   assertFalse(sht.dataReady());
-  assertEqual(SHT31_OK, sht.getError());
+  expect = SHT31_OK;
+  assertEqual(expect, sht.getError());
 
   assertFalse(sht.readData());
-  assertEqual(SHT31_ERR_READBYTES, sht.getError());
+  expect = SHT31_ERR_READBYTES;
+  assertEqual(expect, sht.getError());
 
   assertFalse(sht.readData(true));
-  assertEqual(SHT31_ERR_READBYTES, sht.getError());
+  expect = SHT31_ERR_READBYTES;
+  assertEqual(expect, sht.getError());
 
   assertFalse(sht.readData(false));
-  assertEqual(SHT31_ERR_READBYTES, sht.getError());
+  expect = SHT31_ERR_READBYTES;
+  assertEqual(expect, sht.getError());
 }
 
 unittest_main()
