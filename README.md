@@ -3,8 +3,6 @@
 [![GitHub release](https://img.shields.io/github/release/RobTillaart/SHT31.svg?maxAge=3600)](https://github.com/RobTillaart/SHT31/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/RobTillaart/SHT31/blob/master/LICENSE)
 
-[![Arduino CI](https://github.com/robtillaart/SHT31/workflows/Arduino%20CI/badge.svg?branch=HEAD)](https://github.com/marketplace/actions/arduino_ci)
-
 
 # SHT31
 
