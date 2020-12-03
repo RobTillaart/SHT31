@@ -27,7 +27,7 @@ void setup()
   sht.setHeatTimeout(30);  // heater timeout 30 seconds, just for demo.
 
   status = sht.readStatus();
-  printHeaterStatus(stat);
+  printHeaterStatus(status);
 
   sht.heatOn();
 
