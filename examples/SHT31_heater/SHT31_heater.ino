@@ -34,7 +34,7 @@ void setup()
   while (sht.isHeaterOn())
   {
     status = sht.readStatus();
-    printHeaterStatus(stat);
+    printHeaterStatus(status);
     sht.read();
     Serial.println(sht.getTemperature());
     delay(10000);
