@@ -257,9 +257,9 @@ bool SHT31::readData(bool fast)
   return true;
 }
 
-uint8_t SHT31::getError()
+int SHT31::getError()
 {
-  uint8_t rv = _error;
+  int rv = _error;
   _error = SHT31_OK;
   return rv;
 }

@@ -76,7 +76,7 @@ public:
   bool dataReady();
   bool readData(bool fast = true);
 
-  uint8_t getError(); // clears error flag
+  int getError(); // clears error flag
 
 private:
   uint8_t crc8(const uint8_t *data, uint8_t len);
