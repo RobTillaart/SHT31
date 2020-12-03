@@ -35,6 +35,7 @@
 #include "SHT31.h"
 
 int expect;
+uint32_t start, stop;
 
 unittest_setup()
 {
@@ -59,10 +60,8 @@ unittest(test_begin)
   Serial.println(sht.getHumidity());
 
   // default value == 0
-  int t = 0;
-  assertEqual(t, sht.getTemperature());
+  assertEqual(0, sht.getTemperature());
   assertEqual(0, sht.getHumidity());
-
 }
 
 unittest(test_read)
@@ -76,15 +75,21 @@ unittest(test_read)
   assertEqual(expect, sht.getError());
 
   assertFalse(sht.read());
-  expect = SHT31_OK;
+  expect = SHT31_ERR_READBYTES;
   assertEqual(expect, sht.getError());
 
+  start = millis();
   assertFalse(sht.read(false));
-  expect = SHT31_OK;
+  stop = millis();
+  Serial.println(stop - start);
+  expect = SHT31_ERR_READBYTES;
   assertEqual(expect, sht.getError());
 
+  start = millis();
   assertFalse(sht.read(true));
-  expect = SHT31_OK;
+  stop = millis();
+  Serial.println(stop - start);
+  expect = SHT31_ERR_READBYTES;
   assertEqual(expect, sht.getError());
 }
 
@@ -105,16 +110,16 @@ unittest(test_heater)
   bool b = sht.begin(0x44);
   assertEqual(b, true);
   
-  assertFalse(sht.heatOn());
-  expect = SHT31_ERR_NOT_CONNECT;
+  assertTrue(sht.heatOn());
+  expect = SHT31_OK;
   assertEqual(expect, sht.getError());
 
   assertTrue(sht.heatOff());
-  expect = SHT31_ERR_NOT_CONNECT;
+  expect = SHT31_OK;
   assertEqual(expect, sht.getError());
 
   assertFalse(sht.isHeaterOn());
-  expect = SHT31_ERR_NOT_CONNECT;
+  expect = SHT31_OK;
   assertEqual(expect, sht.getError());
 }
 
