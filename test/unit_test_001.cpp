@@ -100,7 +100,7 @@ unittest(test_readStatus)
   assertEqual(b, true);
   
   assertEqual(0xFFFF, sht.readStatus());
-  expect = SHT31_ERR_NOT_CONNECT;
+  expect = SHT31_ERR_READBYTES;
   assertEqual(expect, sht.getError());
 }
 
