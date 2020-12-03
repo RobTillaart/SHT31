@@ -34,7 +34,8 @@
 #include "Arduino.h"
 #include "SHT31.h"
 
-int expect;
+int expect;  // TODO needed as there seems a problem with 8 bit comparisons (char?)
+
 uint32_t start, stop;
 
 unittest_setup()
