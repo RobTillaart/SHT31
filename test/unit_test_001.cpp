@@ -69,13 +69,13 @@ unittest(test_read)
   assertEqual(SHT31_ERR_NOT_CONNECT, sht.getError());
 
   assertFalse(sht.read());
-  assertEqual(SHT31_ERR_WRITECMD, sht.getError());
+  assertEqual(SHT31_OK, sht.getError());
 
   assertFalse(sht.read(false));
-  assertEqual(SHT31_ERR_WRITECMD, sht.getError());
+  assertEqual(SHT31_OK, sht.getError());
 
   assertFalse(sht.read(true));
-  assertEqual(SHT31_ERR_WRITECMD, sht.getError());
+  assertEqual(SHT31_OK, sht.getError());
   
 }
 
@@ -96,10 +96,10 @@ unittest(test_heater)
   assertEqual(b, true);
   
   assertFalse(sht.heatOn());
-  assertEqual(SHT31_ERR_WRITECMD, sht.getError());
+  assertEqual(SHT31_OK, sht.getError());
 
-  assertFalse(sht.heatOff());
-  assertEqual(SHT31_ERR_HEATER_OFF, sht.getError());
+  assertTrue(sht.heatOff());
+  assertEqual(SHT31_OK, sht.getError());
 
   assertFalse(sht.isHeaterOn());
   assertEqual(SHT31_OK, sht.getError());
@@ -112,10 +112,10 @@ unittest(test_async)
   assertEqual(b, true);
   
   assertFalse(sht.requestData());
-  assertEqual(SHT31_ERR_WRITECMD, sht.getError());
+  assertEqual(SHT31_OK, sht.getError());
 
   assertFalse(sht.dataReady());
-  assertEqual(SHT31_ERR_WRITECMD, sht.getError());
+  assertEqual(SHT31_OK, sht.getError());
 
   assertFalse(sht.readData());
   assertEqual(SHT31_ERR_READBYTES, sht.getError());
