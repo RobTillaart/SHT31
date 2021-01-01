@@ -7,22 +7,21 @@
 //          https://www.adafruit.com/product/2857
 //     URL: https://github.com/RobTillaart/SHT31
 //
-// HISTORY:
-// 0.1.0   2019-02-08 initial version
-// 0.1.1   2019-02-18 add description readStatus(),
-//                    async interface
-// 0.1.2   2019-03-05 fix issue #123 - error in humidity
-//                    stable version
-// 0.2.0   2020-05-12 made humidity & temperature private;
-//                    support ESP32 I2C
-// 0.2.1   2020-06-19 fix library.json
-// 0.2.2   2020-07-05 fix compiling for ESP
-// 0.2.3   2020-07-19 added CRC by PetrDa (thanks); cleanup
-// 0.2.4   2020-11-29 added isConnected()
-// 0.2.5   2020-12-02 added isHeaterOn() + unittest + arduino-ci
-//
-// 0.3.0   2020-11-29 add low level I2C checks + getError() 
-//                    + badges in readme.md + more unittests
+
+//  HISTORY:
+//  0.1.0   2019-02-08  initial version
+//  0.1.1   2019-02-18  add description readStatus(),
+//                      async interface
+//  0.1.2   2019-03-05  fix issue #123 - error in humidity
+//                      stable version
+//  0.2.0   2020-05-12  made humidity & temperature private;
+//                      support ESP32 I2C
+//  0.2.1   2020-06-19  fix library.json
+//  0.2.2   2020-07-05  fix compiling for ESP
+//  0.2.3   2020-07-19  added CRC by PetrDa (thanks); cleanup
+//  0.2.4   2020-11-29  added isConnected()
+//  0.2.5   2020-12-02  added isHeaterOn() + unittest + arduino-ci
+//  0.2.6   2021-01-01  patch version 0.2.6
 
 #include "SHT31.h"
 
@@ -50,6 +49,7 @@ SHT31::SHT31()
   _error       = SHT31_OK;
 }
 
+
 #if defined(ESP8266) || defined(ESP32)
 bool SHT31::begin(const uint8_t address, const uint8_t dataPin, const uint8_t clockPin)
 {
@@ -70,10 +70,12 @@ bool SHT31::begin(const uint8_t address, const uint8_t dataPin, const uint8_t cl
 }
 #endif
 
+
 bool SHT31::begin(const uint8_t address)
 {
   return begin(address, &Wire);
 }
+
 
 bool SHT31::begin(const uint8_t address,  TwoWire *wire)
 {
@@ -87,6 +89,7 @@ bool SHT31::begin(const uint8_t address,  TwoWire *wire)
   return reset();
 }
 
+
 bool SHT31::read(bool fast)
 {
   if (writeCmd(fast ? SHT31_MEASUREMENT_FAST : SHT31_MEASUREMENT_SLOW) == false)
@@ -96,6 +99,7 @@ bool SHT31::read(bool fast)
   delay(fast ? 4 : 15); // table 4 datasheet
   return readData(fast);
 }
+
 
 bool SHT31::isConnected()
 {
@@ -135,6 +139,7 @@ bool SHT31::isConnected()
 //    '1': checksum of last write transfer failed
 #endif
 
+
 uint16_t SHT31::readStatus()
 {
   uint8_t status[3] = { 0, 0, 0 };
@@ -158,6 +163,7 @@ uint16_t SHT31::readStatus()
   return (uint16_t) (status[0] << 8) + status[1];
 }
 
+
 bool SHT31::reset(bool hard)
 {
   bool b = writeCmd(hard ? SHT31_HARD_RESET : SHT31_SOFT_RESET);
@@ -169,11 +175,13 @@ bool SHT31::reset(bool hard)
   return true;
 }
 
+
 void SHT31::setHeatTimeout(uint8_t seconds)
 {
   _heatTimeOut = seconds;
   if (_heatTimeOut > 180) _heatTimeOut = 180;
 }
+
 
 bool SHT31::heatOn()
 {
@@ -185,6 +193,7 @@ bool SHT31::heatOn()
   return true;
 }
 
+
 bool SHT31::heatOff()
 {
   if (writeCmd(SHT31_HEAT_OFF) == false)
@@ -195,6 +204,7 @@ bool SHT31::heatOff()
   _heaterStart = 0;
   return true;
 }
+
 
 bool SHT31::isHeaterOn()
 {
@@ -211,6 +221,7 @@ bool SHT31::isHeaterOn()
   return false;
 }
 
+
 bool SHT31::requestData()
 {
   if (writeCmd(SHT31_MEASUREMENT_SLOW) == false)
@@ -221,10 +232,12 @@ bool SHT31::requestData()
   return true;
 }
 
+
 bool SHT31::dataReady()
 {
   return ((millis() - _lastRequest) > 15);  // TODO MAGIC NR
 }
+
 
 bool SHT31::readData(bool fast)
 {
@@ -258,12 +271,14 @@ bool SHT31::readData(bool fast)
   return true;
 }
 
+
 int SHT31::getError()
 {
   int rv = _error;
   _error = SHT31_OK;
   return rv;
 }
+
 
 //////////////////////////////////////////////////////////
 
@@ -285,6 +300,7 @@ uint8_t SHT31::crc8(const uint8_t *data, uint8_t len)
   return crc;
 }
 
+
 bool SHT31::writeCmd(uint16_t cmd)
 {
   _wire->beginTransmission(_addr);
@@ -297,6 +313,7 @@ bool SHT31::writeCmd(uint16_t cmd)
   }
   return true;
 }
+
 
 bool SHT31::readBytes(uint8_t n, uint8_t *val)
 {
