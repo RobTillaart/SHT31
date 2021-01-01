@@ -22,6 +22,8 @@
 //  0.2.4   2020-11-29  added isConnected()
 //  0.2.5   2020-12-02  added isHeaterOn() + unittest + arduino-ci
 //  0.2.6   2021-01-01  patch version 0.2.6
+//
+//  0.3.0   2021-
 
 #include "SHT31.h"
 
