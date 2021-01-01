@@ -7,20 +7,20 @@
 //          https://www.adafruit.com/product/2857
 //     URL: https://github.com/RobTillaart/SHT31
 //
-// HISTORY:
-// 0.1.0   2019-02-08 initial version
-// 0.1.1   2019-02-18 add description readStatus(),
-//                    async interface
-// 0.1.2   2019-03-05 fix issue #123 - error in humidity
-//                    stable version
-// 0.2.0   2020-05-12 made humidity & temperature private;
-//                    support ESP32 I2C
-// 0.2.1   2020-06-19 fix library.json
-// 0.2.2   2020-07-05 fix compiling for ESP
-// 0.2.3   2020-07-19 added CRC by PetrDa (thanks); cleanup
-// 0.2.4   2020-11-29 added isConnected()
-// 0.2.5   2020-12-02 added isHeaterOn() + unittest + arduino-ci
-
+//  HISTORY:
+//  0.1.0   2019-02-08  initial version
+//  0.1.1   2019-02-18  add description readStatus(),
+//                      async interface
+//  0.1.2   2019-03-05  fix issue #123 - error in humidity
+//                      stable version
+//  0.2.0   2020-05-12  made humidity & temperature private;
+//                      support ESP32 I2C
+//  0.2.1   2020-06-19  fix library.json
+//  0.2.2   2020-07-05  fix compiling for ESP
+//  0.2.3   2020-07-19  added CRC by PetrDa (thanks); cleanup
+//  0.2.4   2020-11-29  added isConnected()
+//  0.2.5   2020-12-02  added isHeaterOn() + unittest + arduino-ci
+//  0.2.6   2021-01-01  patch version 0.2.6
 
 #include "SHT31.h"
 
