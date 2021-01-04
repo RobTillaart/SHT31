@@ -1,4 +1,8 @@
+
 [![Arduino CI](https://github.com/robtillaart/SHT31/workflows/Arduino%20CI/badge.svg)](https://github.com/marketplace/actions/arduino_ci)
+[![GitHub release](https://img.shields.io/github/release/RobTillaart/SHT31.svg?maxAge=3600)](https://github.com/RobTillaart/SHT31/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/RobTillaart/SHT31/blob/master/LICENSE)
+
 
 # SHT31
 
@@ -27,16 +31,33 @@ https://github.com/hawesg/SHT31D_Particle_Photon_ClosedCube
 
 - **SHT31()**  constructor.
 - **begin(address, dataPin, clockPin)** begin function for ESP8266 & ESP32;
-returns false if device address is incorrect.
+returns false if device address is incorrect or device cannot be reset.
 - **begin(address)** for single I2C bus platforms, e.g UNO.
 - **begin(address,  TwoWire \*wire)** for platforms with multiple I2C busses.
-- **read(bool fast = true)** blocks 15 milliseconds + actual read + math
+- **read(bool fast = true)** blocks 4 (fast) or 15 (slow) milliseconds + actual read + math
 - **isConnected()** check sensor is reachable over I2C. Returns false if not connected.
 - **uint16_t readStatus()** details see datasheet and **Status fields** below
 - **uint32_t lastRead()** in milliSeconds since start of program.
-- **reset(bool hard = false)** resets the sensor, soft reset by default.
+- **reset(bool hard = false)** resets the sensor, soft reset by default. Returns false if fails.
 - **getHumidity()** returns relative humidity in %
 - **getTemperature()** returns temperature in °C
+
+#### Error interface
+
+- **getError()** returns last set error flag and clear it. 
+Be sure to clear the error flag by calling **getError()** before calling any command as the error flag could be from a previous command.
+
+| Error | Symbolic | Description |
+|:----:|:----|:----|
+| 0x00 | SHT31_OK              | no error                    |
+| 0x81 | SHT31_ERR_WRITECMD    | I2C write failed            |
+| 0x82 | SHT31_ERR_READBYTES   | I2C read failed             |
+| 0x83 | SHT31_ERR_HEATER_OFF  | Could not switch off heater |
+| 0x84 | SHT31_ERR_NOT_CONNECT | Could not connect           |
+| 0x85 | SHT31_ERR_CRC_TEMP    | CRC error in temperature    |
+| 0x86 | SHT31_ERR_CRC_HUM     | CRC error in humidity       |
+| 0x87 | SHT31_ERR_CRC_STATUS  | CRC error in statusfield    |
+
 
 
 #### Heater interface
@@ -50,8 +71,8 @@ The class does **NOT** do this automatically.
 
 - **setHeatTimeout(uint8_t seconds)** Set the time out of the heat cycle.
 This value is truncated to max 180 seconds. 
-- **heatOn()** switches heat cycle on.
-- **heatOff()** switches  heat cycle off.
+- **heatOn()** switches heat cycle on.  Returns false if fails.
+- **heatOff()** switches  heat cycle off. Returns false if fails.
 - **isHeaterOn()** is the sensor still in heating cycle? replaces **heatUp()**.
 Will switch heat off if max heating time has passed. 
 - **heatUp()** will be obsolete in the future.
@@ -60,9 +81,9 @@ Will switch heat off if max heating time has passed.
 
 See async example for usage
 
-- **requestData()** requests a new measurement.
+- **requestData()** requests a new measurement. Returns false if this fails.
 - **dataReady()** checks if enough time has passed to read the data. (15 millis)
-- **readData(bool fast = true)** fast skips CRC check.
+- **readData(bool fast = true)** fast skips CRC check. Returns false if reading fails or in case of a CRC fail. 
 
 
 ## Status fields

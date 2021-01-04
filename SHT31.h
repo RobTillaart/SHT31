@@ -2,7 +2,7 @@
 //
 //    FILE: SHT31.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.6
+// VERSION: 0.3.0
 //    DATE: 2019-02-08
 // PURPOSE: Arduino library for the SHT31 temperature and humidity sensor
 //          https://www.adafruit.com/product/2857
@@ -12,7 +12,7 @@
 #include "Arduino.h"
 #include "Wire.h"
 
-#define SHT31_LIB_VERSION "0.2.6"
+#define SHT31_LIB_VERSION "0.3.0"
 
 // fields readStatus
 #define SHT31_STATUS_ALERT_PENDING    (1 << 15)
@@ -22,6 +22,17 @@
 #define SHT31_STATUS_SYSTEM_RESET     (1 << 4)
 #define SHT31_STATUS_COMMAND_STATUS   (1 << 1)
 #define SHT31_STATUS_WRITE_CRC_STATUS (1 << 0)
+
+// error codes
+#define SHT31_OK                      0x00
+#define SHT31_ERR_WRITECMD            0x81
+#define SHT31_ERR_READBYTES           0x82
+#define SHT31_ERR_HEATER_OFF          0x83
+#define SHT31_ERR_NOT_CONNECT         0x84
+#define SHT31_ERR_CRC_TEMP            0x85
+#define SHT31_ERR_CRC_HUM             0x86
+#define SHT31_ERR_CRC_STATUS          0x87
+
 
 class SHT31
 {
@@ -46,14 +57,14 @@ public:
   // lastRead is in milliSeconds since start
   uint32_t lastRead() { return _lastRead; };
 
-  void reset(bool hard = false);
+  bool reset(bool hard = false);
 
   // do not use heater for long periods,
   // use it for max 3 minutes to heat up
   // and let it cool down an equal period.
   void setHeatTimeout(uint8_t seconds);
-  void heatOn();
-  void heatOff();
+  bool heatOn();
+  bool heatOff();
   bool isHeaterOn();  // is the sensor still heating up?
   bool heatUp() { return isHeaterOn(); };   // will be obsolete in future
 
@@ -61,14 +72,16 @@ public:
   float getTemperature() { return temperature; };
 
   // ASYNC INTERFACE
-  void requestData();
+  bool requestData();
   bool dataReady();
   bool readData(bool fast = true);
 
+  int getError(); // clears error flag
+
 private:
   uint8_t crc8(const uint8_t *data, uint8_t len);
-  void writeCmd(uint16_t cmd);
-  void readBytes(uint8_t n, uint8_t *val);
+  bool writeCmd(uint16_t cmd);
+  bool readBytes(uint8_t n, uint8_t *val);
   TwoWire* _wire;
 
   uint8_t   _addr;
@@ -79,6 +92,8 @@ private:
 
   float humidity;
   float temperature;
+
+  uint8_t _error;
 };
 
 // -- END OF FILE --
