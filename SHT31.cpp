@@ -23,9 +23,11 @@
 //  0.2.5   2020-12-02  added isHeaterOn() + unittest + arduino-ci
 //  0.2.6   2021-01-01  patch version 0.2.6
 //
-//  0.3.0   2021-
+//  0.3.0   2021-01-04  arduino-ci 
+
 
 #include "SHT31.h"
+
 
 // SUPPORTED COMMANDS - single shot mode only
 #define SHT31_READ_STATUS       0xF32D
