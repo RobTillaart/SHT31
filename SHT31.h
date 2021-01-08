@@ -9,10 +9,13 @@
 //     URL: https://github.com/RobTillaart/SHT31
 //
 
+
 #include "Arduino.h"
 #include "Wire.h"
 
+
 #define SHT31_LIB_VERSION "0.3.0"
+
 
 // fields readStatus
 #define SHT31_STATUS_ALERT_PENDING    (1 << 15)
