@@ -1,7 +1,7 @@
 //
 //    FILE: SHT31_async.ino
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.0
+// VERSION: 0.3.2
 // PURPOSE: demo async interface
 //     URL: https://github.com/RobTillaart/SHT31
 
