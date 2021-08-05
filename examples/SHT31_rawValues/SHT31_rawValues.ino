@@ -63,11 +63,11 @@ void loop()
       rawHumidity = sht.getRawHumidity();
       Serial.print(rawTemperature, HEX);
       Serial.print(" = ");
-      Serial.print(rawTemperature * (175.0 / 65535) - 45, 1);
+      Serial.print(rawTemperature * (175.0 / 65535) - 45, 1); // This formula comes from page 14 of the SHT31 datasheet
       Serial.print("°C\t");
       Serial.print(sht.getRawHumidity(), HEX);
       Serial.print(" = ");
-      Serial.print(rawHumidity * (100.0 / 65535), 1);
+      Serial.print(rawHumidity * (100.0 / 65535), 1); // This formula comes from page 14 of the SHT31 datasheet
       Serial.print("%\t");
       Serial.println(cnt);
       cnt = 0;
