@@ -40,6 +40,9 @@ void setup()
 
 void loop()
 {
+  uint16_t rawTemperature;
+  uint16_t rawHumidity;
+
   if (sht.dataReady())
   {
     start = micros();
@@ -56,10 +59,16 @@ void loop()
     }
     else
     {
-      Serial.print(sht.getRawTemperature(), HEX);
-      Serial.print("\t");
+      rawTemperature = sht.getRawTemperature();
+      rawHumidity = sht.getRawHumidity();
+      Serial.print(rawTemperature, HEX);
+      Serial.print(" = ");
+      Serial.print(rawTemperature * (175.0 / 65535) - 45, 1);
+      Serial.print("°C\t");
       Serial.print(sht.getRawHumidity(), HEX);
-      Serial.print("\t");
+      Serial.print(" = ");
+      Serial.print(rawHumidity * (100.0 / 65535), 1);
+      Serial.print("%\t");
       Serial.println(cnt);
       cnt = 0;
     }

@@ -47,12 +47,12 @@
 
 SHT31::SHT31()
 {
-  _addr            = 0;
-  _lastRead        = 0;
-  _rawTemperature  = 0;
-  _rawHumidity     = 0;
-  _heaterStart     = 0;
-  _error           = SHT31_OK;
+  _addr           = 0;
+  _lastRead       = 0;
+  rawTemperature  = 0;
+  rawHumidity     = 0;
+  _heaterStart    = 0;
+  _error          = SHT31_OK;
 }
 
 
