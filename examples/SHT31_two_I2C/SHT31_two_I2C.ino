@@ -40,8 +40,8 @@ void setup()
 
   b1 = sht_1.begin(SHT31_ADDRESS_1, &Wire);
   b2 = sht_2.begin(SHT31_ADDRESS_2, &Wire);
-  b3 = sht_3.begin(SHT31_ADDRESS_3, &Wire1);
-  b4 = sht_4.begin(SHT31_ADDRESS_4, &Wire1);
+  b3 = sht_3.begin(SHT31_ADDRESS_3, &myWire);
+  b4 = sht_4.begin(SHT31_ADDRESS_4, &myWire);
 
   // see if they are connected
   Serial.print("BEGIN:\t");
