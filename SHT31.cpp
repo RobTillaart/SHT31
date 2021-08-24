@@ -197,7 +197,7 @@ void SHT31::setHeatTimeout(uint8_t seconds)
 bool SHT31::heatOn()
 {
   if (isHeaterOn()) return true;
-  if (millis() - _heaterStop < SHT31_HEATER_TIMEOUT)
+  if ((_heaterStop > 0) && (millis() - _heaterStop < SHT31_HEATER_TIMEOUT))
   {
     _error = SHT31_ERR_HEATER_COOLDOWN;
     return false;

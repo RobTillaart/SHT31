@@ -120,8 +120,8 @@ unittest(test_heater)
   bool b = sht.begin(0x44);
   assertEqual(b, true);
   
-  assertTrue(sht.heatOn());
-  expect = SHT31_OK;
+  assertFalse(sht.heatOn());
+  expect = SHT31_ERR_HEATER_COOLDOWN;
   assertEqual(expect, sht.getError());
 
   assertTrue(sht.heatOff());
