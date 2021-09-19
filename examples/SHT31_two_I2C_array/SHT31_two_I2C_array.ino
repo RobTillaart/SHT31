@@ -4,13 +4,19 @@
 // VERSION: 0.1.0
 // PURPOSE: demo
 //     URL: https://github.com/RobTillaart/SHT31
+//
+//   NOTE: see issue #22 for details
+//         originally written for a ATSAMD21G18A custom board.
+//         edited for a board (e.g. ESP32) that has Wire and Wire1 (compiles, not tested)
 
 
 #include "Wire.h"
 #include "SHT31.h"
 
-// TwoWire myWire(&sercom5, 16, 17);
+
+// TwoWire myWire(&sercom5, 0, 1);
 TwoWire myWire = Wire1;
+
 
 uint8_t addr[4]   = { 0x44, 0x45, 0x44, 0x45 };
 TwoWire * wireAr[4] = { &Wire, &Wire, &myWire, &myWire };
@@ -29,6 +35,10 @@ void setup()
   Wire.setClock(100000);
   myWire.begin();
   myWire.setClock(100000);
+
+  // see datasheet for details
+  // pinPeripheral(0, PIO_SERCOM_ALT);
+  // pinPeripheral(1, PIO_SERCOM_ALT);
 
   for (uint8_t i = 0; i < 4; i++)
   {

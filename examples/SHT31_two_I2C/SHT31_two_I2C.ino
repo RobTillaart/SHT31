@@ -4,14 +4,21 @@
 // VERSION: 0.1.0
 // PURPOSE: demo
 //     URL: https://github.com/RobTillaart/SHT31
+//
+//   NOTE: see issue #22 for details
+//         originally written for a ATSAMD21G18A custom board.
+//
 
 
 #include "Wire.h"
 #include "SHT31.h"
 
-// TwoWire myWire(&sercom5, 16, 17); 
-TwoWire myWire = Wire1;    
 
+TwoWire myWire(&sercom5, 0, 1);
+// TwoWire myWire = Wire1;       // test.
+
+
+// note: address reuse on second I2C bus
 #define SHT31_ADDRESS_1   0x44
 #define SHT31_ADDRESS_2   0x45
 #define SHT31_ADDRESS_3   0x44
@@ -22,6 +29,7 @@ SHT31 sht_1;
 SHT31 sht_2;
 SHT31 sht_3;
 SHT31 sht_4;
+
 
 bool b1, b2, b3, b4;
 
@@ -35,8 +43,12 @@ void setup()
 
   Wire.begin();
   Wire.setClock(100000);
-  Wire1.begin();
-  Wire1.setClock(100000);
+  myWire.begin();
+  myWire.setClock(100000);
+
+  // see datasheet for details
+  pinPeripheral(0, PIO_SERCOM_ALT);
+  pinPeripheral(1, PIO_SERCOM_ALT);
 
   b1 = sht_1.begin(SHT31_ADDRESS_1, &Wire);
   b2 = sht_2.begin(SHT31_ADDRESS_2, &Wire);
@@ -59,7 +71,7 @@ void setup()
 
 void loop()
 {
-  // read all that are found
+  // read all sensors that are found
   if (b1) sht_1.read();
   if (b2) sht_2.read();
   if (b3) sht_3.read();
