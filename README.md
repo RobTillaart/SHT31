@@ -40,7 +40,7 @@ https://github.com/hawesg/SHT31D_Particle_Photon_ClosedCube
 - **bool begin(address, dataPin, clockPin)** begin function for ESP8266 & ESP32;
 returns false if device address is incorrect or device cannot be reset.
 - **bool begin(address)** for single I2C bus platforms, e.g UNO.
-- **bool begin(address,  TwoWire \*wire)** for platforms with multiple I2C busses.
+- **bool begin(address,  TwoWire \*wire)** for platforms with multiple I2C buses.
 - **bool read(bool fast = true)** blocks 4 (fast) or 15 (slow) milliseconds + actual read + math.
 Does read both the temperature and humidity.
 - **bool isConnected()** check sensor is reachable over I2C. Returns false if not connected.
@@ -52,7 +52,9 @@ Does read both the temperature and humidity.
 - **uint16_t getRawHumidity()** returns the raw two-byte representation of humidity directly from the sensor.
 - **uint16_t getRawTemperature()** returns the raw two-byte representation of temperature directly from the sensor.
 
-Note that the temperature and humidity values are recalculated on every call to getHumidity() and getTemperature(). If you're worried about the extra cycles, you should make sure to cache these values or only request them after you've performed a new reading.
+Note that the temperature and humidity values are recalculated on every call to getHumidity() and getTemperature(). 
+If you're worried about the extra cycles, you should make sure to cache these values or only request them after 
+you've performed a new reading.
 
 
 #### Error interface
@@ -134,14 +136,18 @@ Returns false if reading fails or in case of a CRC failure.
 |      |                            |  1      | checksum of last write transfer failed
 
 
+
+## Operation
+
+See examples.
+
+
 ## Future
 
 - merge with other SHT sensors if possible
 - direct Fahrenheit formula ?
 - improve error handling / status. (all code paths)
-
-
-## Operation
-
-See examples
-
+- verify working with ESP32
+- investigate command ART (auto sampling at 4 Hz)
+- investigate command BREAK (stop auto sampling)
+- software I2C experiments?
