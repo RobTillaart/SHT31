@@ -18,5 +18,6 @@
   "version": "0.3.4",
   "license": "MIT",
   "frameworks": "arduino",
-  "platforms": "*"
+  "platforms": "*",
+  "headers": "SHT31.h"
 }
