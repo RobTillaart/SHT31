@@ -41,7 +41,7 @@ uint32_t start, stop;
 
 unittest_setup()
 {
-  fprintf(stderr, "SHT31_LIB_VERSION: %s\n" (char *) SHT31_LIB_VERSION);
+  fprintf(stderr, "SHT31_LIB_VERSION: %s\n", (char *) SHT31_LIB_VERSION);
 }
 
 
