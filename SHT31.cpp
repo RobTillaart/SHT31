@@ -28,6 +28,8 @@
 
 SHT31::SHT31()
 {
+  _wire           = 0;
+  _softWire       = 0;
   _address        = 0;
   _lastRead       = 0;
   _rawTemperature = 0;
@@ -79,8 +81,25 @@ bool SHT31::begin(const uint8_t address,  TwoWire *wire)
   return reset();
 }
 
+bool SHT31::begin(const uint8_t address,  SoftWire *wire)
+{
+  if ((address != 0x44) && (address != 0x45))
+  {
+    return false;
+  }
+  _address = address;
+  _softWire    = wire;
+  _softWire->begin();
+  return reset();
+}
+
 
 bool SHT31::begin(TwoWire *wire)
+{
+  return begin(SHT_DEFAULT_ADDRESS, wire);
+}
+
+bool SHT31::begin(SoftWire *wire)
 {
   return begin(SHT_DEFAULT_ADDRESS, wire);
 }
@@ -99,8 +118,9 @@ bool SHT31::read(bool fast)
 
 bool SHT31::isConnected()
 {
-  _wire->beginTransmission(_address);
-  int rv = _wire->endTransmission();
+  if (_wire) _wire->beginTransmission(_address); else _softWire->beginTransmission(_address);
+  int rv;
+  if (_wire) rv = _wire->endTransmission(); else rv = _softWire->endTransmission();
   if (rv != 0) _error = SHT31_ERR_NOT_CONNECT;
   return (rv == 0);
 }
@@ -307,10 +327,23 @@ uint8_t SHT31::crc8(const uint8_t *data, uint8_t len)
 
 bool SHT31::writeCmd(uint16_t cmd)
 {
-  _wire->beginTransmission(_address);
-  _wire->write(cmd >> 8 );
-  _wire->write(cmd & 0xFF);
-  if (_wire->endTransmission() != 0)
+  uint8_t eT;
+
+  if (_wire)
+  {
+    _wire->beginTransmission(_address);
+    _wire->write(cmd >> 8 );
+    _wire->write(cmd & 0xFF);
+    eT = _wire->endTransmission();
+  }
+  else
+  {
+    _softWire->beginTransmission(_address);
+    _softWire->write(cmd >> 8 );
+    _softWire->write(cmd & 0xFF);
+    eT = _softWire->endTransmission();
+  }
+  if (eT != 0)
   {
     _error = SHT31_ERR_WRITECMD;
     return false;
@@ -321,12 +354,13 @@ bool SHT31::writeCmd(uint16_t cmd)
 
 bool SHT31::readBytes(uint8_t n, uint8_t *val)
 {
-  int rv = _wire->requestFrom(_address, (uint8_t) n);
+  int rv;
+  if (_wire) rv = _wire->requestFrom(_address, (uint8_t) n); else rv = _softWire->requestFrom(_address, (uint8_t) n);
   if (rv == n)
   {
     for (uint8_t i = 0; i < n; i++)
     {
-      val[i] = _wire->read();
+      if (_wire) val[i] = _wire->read(); else val[i] = _softWire->read();
     }
     return true;
   }

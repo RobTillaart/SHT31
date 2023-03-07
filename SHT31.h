@@ -11,6 +11,7 @@
 
 #include "Arduino.h"
 #include "Wire.h"
+#include "SoftWire.h"
 
 
 #define SHT31_LIB_VERSION             (F("0.3.7"))
@@ -55,6 +56,10 @@ public:
   // use SHT_DEFAULT_ADDRESS
   bool begin(TwoWire *wire = &Wire);
 
+  bool begin(const uint8_t address,  SoftWire *wire);
+  // use SHT_DEFAULT_ADDRESS
+  bool begin(SoftWire *wire);
+
   // blocks 15 milliseconds + actual read + math
   bool read(bool fast = true);
 
@@ -97,7 +102,8 @@ private:
   uint8_t crc8(const uint8_t *data, uint8_t len);
   bool writeCmd(uint16_t cmd);
   bool readBytes(uint8_t n, uint8_t *val);
-  TwoWire* _wire;
+  TwoWire*  _wire;
+  SoftWire* _softWire;
 
   uint8_t   _address;
   uint8_t   _heatTimeout;   // seconds
