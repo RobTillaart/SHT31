@@ -13,6 +13,11 @@ packages:
   rp2040:rp2040:
     url: https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
 
+unittest:
+  libraries:
+    - "SoftWire"
+    - "AsyncDelay"
+
 compile:
   # Choosing to run compilation tests on 2 different Arduino platforms
   platforms:
