@@ -14,4 +14,5 @@ jobs:
           ruby-version: 2.6
       - run: |
           gem install arduino_ci
+          ./.github/scripts/patch_arduino_ci.sh
           arduino_ci.rb
