@@ -11,7 +11,6 @@
 
 #include "Arduino.h"
 #include "Wire.h"
-#include "SoftWire.h"
 
 
 #define SHT31_LIB_VERSION             (F("0.3.7"))
@@ -56,15 +55,11 @@ public:
   // use SHT_DEFAULT_ADDRESS
   bool begin(TwoWire *wire = &Wire);
 
-  bool begin(const uint8_t address,  SoftWire *wire);
-  // use SHT_DEFAULT_ADDRESS
-  bool begin(SoftWire *wire);
-
   // blocks 15 milliseconds + actual read + math
   bool read(bool fast = true);
 
   // check sensor is reachable over I2C
-  bool isConnected();
+  virtual bool isConnected();
 
   // details see datasheet; summary in SHT31.cpp file
   uint16_t readStatus();
@@ -98,13 +93,7 @@ public:
 
   int getError(); // clears error flag
 
-private:
-  uint8_t crc8(const uint8_t *data, uint8_t len);
-  bool writeCmd(uint16_t cmd);
-  bool readBytes(uint8_t n, uint8_t *val);
-  TwoWire*  _wire;
-  SoftWire* _softWire;
-
+protected:
   uint8_t   _address;
   uint8_t   _heatTimeout;   // seconds
   uint32_t  _lastRead;
@@ -117,6 +106,31 @@ private:
   uint16_t _rawTemperature;
 
   uint8_t _error;
+
+private:
+  uint8_t crc8(const uint8_t *data, uint8_t len);
+  virtual bool writeCmd(uint16_t cmd);
+  virtual bool readBytes(uint8_t n, uint8_t *val);
+  TwoWire* _wire;
+};
+
+#include <SoftWire.h>
+
+class SHT31sw : public SHT31
+{
+public:
+  SHT31sw();
+
+  bool begin(const uint8_t address,  SoftWire *wire);
+  bool begin(SoftWire *wire);
+
+  // check sensor is reachable over I2C
+  bool isConnected();
+
+private:
+  bool writeCmd(uint16_t cmd);
+  bool readBytes(uint8_t n, uint8_t *val);
+  SoftWire* _softWire;
 };
 
 // -- END OF FILE --
