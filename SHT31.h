@@ -94,7 +94,15 @@ public:
   int getError(); // clears error flag
 
 protected:
-  uint8_t   _address;
+  uint8_t _address;
+  uint8_t _error;
+
+private:
+  uint8_t crc8(const uint8_t *data, uint8_t len);
+  virtual bool writeCmd(uint16_t cmd);
+  virtual bool readBytes(uint8_t n, uint8_t *val);
+  TwoWire* _wire;
+
   uint8_t   _heatTimeout;   // seconds
   uint32_t  _lastRead;
   uint32_t  _lastRequest;   // for async interface
@@ -104,14 +112,6 @@ protected:
 
   uint16_t _rawHumidity;
   uint16_t _rawTemperature;
-
-  uint8_t _error;
-
-private:
-  uint8_t crc8(const uint8_t *data, uint8_t len);
-  virtual bool writeCmd(uint16_t cmd);
-  virtual bool readBytes(uint8_t n, uint8_t *val);
-  TwoWire* _wire;
 };
 
 #include <SoftWire.h>

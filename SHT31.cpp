@@ -339,16 +339,8 @@ bool SHT31::readBytes(uint8_t n, uint8_t *val)
 
 SHT31sw::SHT31sw()
 {
-  _softWire       = 0;
-  _address        = 0;
-  _lastRead       = 0;
-  _rawTemperature = 0;
-  _rawHumidity    = 0;
-  _heatTimeout    = 0;
-  _heaterStart    = 0;
-  _heaterStop     = 0;
-  _heaterOn       = false;
-  _error          = SHT31_OK;
+  SHT31();
+  _softWire = 0;
 }
 
 
