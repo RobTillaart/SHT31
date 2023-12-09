@@ -26,8 +26,8 @@ void setup()
   Serial.println(SHT31_LIB_VERSION);
 
   Wire.begin();
-  sht.begin(SHT31_ADDRESS);
   Wire.setClock(100000);
+  sht.begin();
 
   uint16_t stat = sht.readStatus();
   Serial.print(stat, HEX);
