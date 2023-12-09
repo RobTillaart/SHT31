@@ -13,7 +13,8 @@
 uint32_t start;
 uint32_t stop;
 
-SHT31 sht;
+SHT31 sht;  //  use default address and Wire
+
 uint32_t connectionFails = 0;
 
 
@@ -39,7 +40,7 @@ void loop()
   if ( sht.isConnected()  )
   {
     start = micros();
-    bool b = sht.read();         // default = true/fast       slow = false
+    bool b = sht.read();         //  default = true/fast       slow = false
     stop = micros();
 
     int error = sht.getError();
@@ -72,5 +73,5 @@ void loop()
 }
 
 
-// -- END OF FILE --
+//  -- END OF FILE --
 
