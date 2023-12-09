@@ -43,7 +43,7 @@ SHT31::SHT31(uint8_t address, TwoWire *wire)
 
 bool SHT31::begin()
 {
-  if ((address != 0x44) && (address != 0x45))
+  if ((_address != 0x44) && (_address != 0x45))
   {
     return false;
   }
