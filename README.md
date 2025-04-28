@@ -40,7 +40,7 @@ A derived class for using the SHT31 sensor with SoftWire (soft I2C) can be found
 - https://github.com/RobTillaart/SHT31_SW
 
 
-#### 0.5.0 Breaking change
+### 0.5.0 Breaking change
 
 Version 0.5.0 introduced a breaking change.
 You cannot set the pins in **begin()** any more.
@@ -49,12 +49,19 @@ The user has to call **Wire.begin()** and can optionally set the Wire pins
 before calling **begin()**.
 
 
-#### Related
+### Related
 
-- https://github.com/RobTillaart/SHT31
+- https://github.com/RobTillaart/DHTNew DHT11/22 etc
+- https://github.com/RobTillaart/DHTStable DHT11/22 etc
+- https://github.com/RobTillaart/DHT_Simulator
+- https://github.com/RobTillaart/DS18B20_INT OneWire temperature sensor
+- https://github.com/RobTillaart/DS18B20_RT OneWire temperature sensor
+- https://github.com/RobTillaart/SHT31 Sensirion humidity / temperature sensor
 - https://github.com/RobTillaart/SHT31_SW
 - https://github.com/RobTillaart/SHT31_SWW
-- https://github.com/RobTillaart/SHT85
+- https://github.com/RobTillaart/SHT85 Sensirion humidity / temperature sensor
+- https://www.kandrsmith.org/RJS/Misc/Hygrometers/calib_many.html (interesting)
+- https://github.com/RobTillaart/Temperature (conversions, dewPoint, heat index etc.)
 
 
 ## Interface
@@ -63,7 +70,7 @@ before calling **begin()**.
 #include "SHT31.h"
 ```
 
-#### Constructor
+### Constructor
 
 - **SHT31(uint8_t address = SHT_DEFAULT_ADDRESS, TwoWire \*wire = &Wire)** constructor. 
 Optional select address and the I2C bus (Wire, Wire1 etc).
@@ -73,13 +80,20 @@ Returns false if device address is incorrect or device cannot be reset.
 - **uint8_t getAddress()** returns address set in the constructor.
 
 
-#### Read
+### Read
 
 - **bool read(bool fast = true)** blocks 4 (fast) or 15 (slow) milliseconds + actual read + math.
 Does read both the temperature and humidity.
-- **uint16_t readStatus()** details see datasheet and **Status fields** below.
+
+Meta information about the sensor.
+
+- **uint16_t readStatus()** returns bit mask, details see **Status fields** below (and datasheet).
+- **bool clearStatus()** clear status register, see **Status fields** below.
 - **uint32_t lastRead()** in milliSeconds since start of program.
 - **bool reset(bool hard = false)** resets the sensor, soft reset by default. Returns false if it fails.
+
+The following functions will return the same value until a new **read()** call (or async) is made.
+
 - **float getHumidity()** computes the relative humidity in % based on the latest raw reading, and returns it.
 - **float getTemperature()** computes the temperature in °C based on the latest raw reading, and returns it.
 - **float getFahrenheit()** computes the temperature in °F based on the latest raw reading, and returns it..
@@ -91,7 +105,7 @@ If you're worried about the extra cycles, you should make sure to cache these va
 you've performed a new reading.
 
 
-#### Error interface
+### Error interface
 
 - **int getError()** returns last set error flag and clear it. 
 Be sure to clear the error flag by calling **getError()** before calling any command as the error flag could be from a previous command.
@@ -110,7 +124,7 @@ Be sure to clear the error flag by calling **getError()** before calling any com
 |  0x88   |  SHT31_ERR_HEATER_ON        |  Could not switch on heater   |
 
 
-#### Heater interface
+### Heater interface
 
 **WARNING:** Do not use heater for long periods. 
 
@@ -133,10 +147,9 @@ or to **SHT31_ERR_HEATER_ON**.
 Returns false if fails, setting error to **SHT31_ERR_HEATER_OFF**.
 - **bool isHeaterOn()** is the sensor still in heating cycle? replaces **heatUp()**.
 Will switch the heater off if max heating time has passed. 
-- **bool heatUp()** will be obsolete in the future. replaced by **isHeaterOn()**
 
 
-#### Async interface
+### Async interface
 
 See async example for usage
 
@@ -169,6 +182,7 @@ Returns false if reading fails or in case of a CRC failure.
 |   0   |  Write data checksum status  |  0      | checksum of last write correct
 |       |                              |  1      | checksum of last write transfer failed
 
+**bool clearStatus()** clears 15, 11, 10 and 4.
 
 
 ## Operation
@@ -180,6 +194,7 @@ See examples.
 
 #### Must
 
+- improve documentation
 - keep in sync with SHT85 library.
 - keep derived SHT31_SW builds green
 
