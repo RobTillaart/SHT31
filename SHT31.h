@@ -57,6 +57,7 @@ public:
 
   //  details see datasheet; summary in SHT31.cpp file
   uint16_t readStatus();
+  bool clearStatus();
 
   //  lastRead is in milliSeconds since start
   uint32_t lastRead() { return _lastRead; };

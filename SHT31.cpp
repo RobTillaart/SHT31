@@ -131,6 +131,15 @@ uint16_t SHT31::readStatus()
   return (uint16_t) (status[0] << 8) + status[1];
 }
 
+bool SHT31::clearStatus()
+{
+  if (writeCmd(SHT31_CLEAR_STATUS) == false)
+  {
+    return false;
+  }
+  _lastRequest = millis();
+  return true;
+}
 
 bool SHT31::reset(bool hard)
 {
