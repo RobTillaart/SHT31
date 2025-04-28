@@ -18,9 +18,9 @@ Relates to the SHT85 library - https://github.com/RobTillaart/SHT85
 
 ## Description
 
-The SHT3x family of sensors should work up to 1 MHz I2C
+The SHT3x family of sensors should work up to 1 MHz I2C.
 
-This library should also work for SHT30 and SHT35 but these are 
+This library should also work for SHT30 and SHT35 but these are
 not tested yet.
 
 Accuracy table
@@ -68,7 +68,6 @@ before calling **begin()**.
 
 
 ### Related
-
 
 SHT series temperature sensors
 
