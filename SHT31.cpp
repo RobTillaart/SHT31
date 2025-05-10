@@ -310,13 +310,13 @@ bool SHT31::getSerialNumber(uint32_t &serial, bool fast) {
       return false;
       }
   }
-  serial = bytes[0];
+  serial = buffer[0];
   serial <<= 8;
-  serial += bytes[1];
+  serial += buffer[1];
   serial <<= 8;
-  serial += bytes[3];
+  serial += buffer[3];
   serial <<= 8;
-  serial += bytes[4];
+  serial += buffer[4];
   return true;
 }
 
