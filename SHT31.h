@@ -91,6 +91,7 @@ public:
   bool dataReady();
   bool readData(bool fast = true);
 
+  //  MISC
   int getError();  //  clears error flag
   //  fast == true, => skips CRC check
   bool getSerialNumber(uint32_t &serial, bool fast = true);

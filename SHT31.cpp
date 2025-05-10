@@ -30,8 +30,8 @@ static constexpr uint16_t SHT31_GET_SERIAL_NUMBER = 0x3682;     //  no clock str
 
 SHT31::SHT31(uint8_t address, TwoWire *wire)
 {
-  _wire           = wire;
   _address        = address;
+  _wire           = wire;
   _lastRead       = 0;
   _rawTemperature = 0;
   _rawHumidity    = 0;
@@ -133,7 +133,6 @@ uint16_t SHT31::readStatus()
     _error = SHT31_ERR_CRC_STATUS;
     return 0xFFFF;
   }
-
   return (uint16_t) (status[0] << 8) + status[1];
 }
 
@@ -151,6 +150,7 @@ bool SHT31::clearStatus()
   }
   return true;
 }
+
 
 bool SHT31::reset(bool hard)
 {
@@ -226,7 +226,7 @@ bool SHT31::isHeaterOn()
 
 /////////////////////////////////////////////////////////////////
 //
-//  ASYNC
+//  ASYNCHRONUOUS INTERFACE
 //
 bool SHT31::requestData()
 {
@@ -271,7 +271,6 @@ bool SHT31::readData(bool fast)
   _rawHumidity    = (buffer[3] << 8) + buffer[4];
 
   _lastRead = millis();
-
   return true;
 }
 
@@ -311,7 +310,13 @@ bool SHT31::getSerialNumber(uint32_t &serial, bool fast) {
       return false;
       }
   }
-  serial = (buffer[0] << 24) | (buffer[1] << 16) | (buffer[3] << 8) | buffer[4];
+  serial = bytes[0];
+  serial <<= 8;
+  serial += bytes[1];
+  serial <<= 8;
+  serial += bytes[3];
+  serial <<= 8;
+  serial += bytes[4];
   return true;
 }
 
@@ -349,6 +354,7 @@ bool SHT31::writeCmd(uint16_t cmd)
     _error = SHT31_ERR_WRITECMD;
     return false;
   }
+  _error = SHT31_OK;
   return true;
 }
 
@@ -362,6 +368,7 @@ bool SHT31::readBytes(uint8_t n, uint8_t *val)
     {
       val[i] = _wire->read();
     }
+    _error = SHT31_OK;
     return true;
   }
   _error = SHT31_ERR_READBYTES;
