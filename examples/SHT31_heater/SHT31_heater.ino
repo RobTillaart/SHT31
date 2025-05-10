@@ -23,7 +23,6 @@ void setup()
   Serial.print("SHT31_LIB_VERSION: \t");
   Serial.println(SHT31_LIB_VERSION);
   Serial.println();
-N);
 
   Wire.begin();
   Wire.setClock(100000);

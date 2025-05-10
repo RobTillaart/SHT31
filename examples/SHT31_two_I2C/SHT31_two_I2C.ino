@@ -42,7 +42,6 @@ void setup()
   Serial.println(SHT31_LIB_VERSION);
   Serial.println();
 
-
   Wire.begin();
   Wire.setClock(100000);
   myWire.begin();

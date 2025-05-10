@@ -225,7 +225,9 @@ Returns false if reading fails or in case of a CRC failure.
 
 ### GetSerial
 
-- **bool getSerialNumber(uint32_t &serial, bool fast = true)**
+- **bool getSerialNumber(uint32_t &serial, bool fast = true)** fast == true, => no CRC check
+fast == false, => do CRC check. 
+
 
 ## Future
 
@@ -244,7 +246,7 @@ Returns false if reading fails or in case of a CRC failure.
 #### Could
 
 - move code from .h to .cpp
-- param fast => CRC-check?
+- param fast in getSerialNumber => skipCRC?
 
 
 #### Wont

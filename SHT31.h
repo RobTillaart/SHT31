@@ -92,7 +92,7 @@ public:
   bool readData(bool fast = true);
 
   int getError();  //  clears error flag
-  //  fast => skips CRC check
+  //  fast == true, => skips CRC check
   bool getSerialNumber(uint32_t &serial, bool fast = true);
 
 
