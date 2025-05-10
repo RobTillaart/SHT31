@@ -223,6 +223,10 @@ Returns false if reading fails or in case of a CRC failure.
 **bool clearStatus()** clears 15, 11, 10 and 4.
 
 
+### GetSerial
+
+- **bool getSerialNumber(uint32_t &serial, bool fast = true)**
+
 ## Future
 
 #### Must
@@ -240,6 +244,8 @@ Returns false if reading fails or in case of a CRC failure.
 #### Could
 
 - move code from .h to .cpp
+- param fast => CRC-check?
+
 
 #### Wont
 

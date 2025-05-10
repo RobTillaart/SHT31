@@ -12,20 +12,21 @@
 
 
 //  SUPPORTED COMMANDS - single shot mode only
-#define SHT31_READ_STATUS       0xF32D
-#define SHT31_CLEAR_STATUS      0x3041
+static constexpr uint16_t SHT31_READ_STATUS       = 0xF32D;
+static constexpr uint16_t SHT31_CLEAR_STATUS      = 0x3041;
 
-#define SHT31_SOFT_RESET        0x30A2
-#define SHT31_HARD_RESET        0x0006
+static constexpr uint16_t SHT31_SOFT_RESET        = 0x30A2;
+static constexpr uint16_t SHT31_HARD_RESET        = 0x0006;
 
-#define SHT31_MEASUREMENT_FAST  0x2416     //  page 10 datasheet
-#define SHT31_MEASUREMENT_SLOW  0x2400     //  no clock stretching
+static constexpr uint16_t SHT31_MEASUREMENT_FAST  = 0x2416 ;    //  page 10 datasheet
+static constexpr uint16_t SHT31_MEASUREMENT_SLOW  = 0x2400;     //  no clock stretching
 
-#define SHT31_HEAT_ON           0x306D
-#define SHT31_HEAT_OFF          0x3066
-#define SHT31_HEATER_TIMEOUT    180000UL   //  milliseconds
+static constexpr uint16_t SHT31_HEAT_ON           = 0x306D;
+static constexpr uint16_t SHT31_HEAT_OFF          = 0x3066;
+static constexpr uint32_t SHT31_HEATER_TIMEOUT    = 180000UL;   //  milliseconds
 
-static constexpr uint16_t SHT31_GET_SERIAL_NUMBER = 0x3682;		//  no clock stretching
+static constexpr uint16_t SHT31_GET_SERIAL_NUMBER = 0x3682;     //  no clock stretching
+
 
 SHT31::SHT31(uint8_t address, TwoWire *wire)
 {
@@ -275,12 +276,17 @@ bool SHT31::readData(bool fast)
 }
 
 
+/////////////////////////////////////////////////////////////////
+//
+//  MISC
+//
 int SHT31::getError()
 {
   int rv = _error;
   _error = SHT31_OK;
   return rv;
 }
+
 
 /**
  * See https://sensirion.com/media/documents/E5762713/63D103C2/Sensirion_electronic_identification_code_SHT3x.pdf
@@ -308,6 +314,7 @@ bool SHT31::getSerialNumber(uint32_t &serial, bool fast) {
   serial = (buffer[0] << 24) | (buffer[1] << 16) | (buffer[3] << 8) | buffer[4];
   return true;
 }
+
 
 /////////////////////////////////////////////////////////////////
 //
