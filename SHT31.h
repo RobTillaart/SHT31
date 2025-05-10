@@ -39,7 +39,7 @@
 #define SHT31_ERR_CRC_STATUS          0x87
 #define SHT31_ERR_HEATER_COOLDOWN     0x88
 #define SHT31_ERR_HEATER_ON           0x89
-
+#define SHT31_ERR_SERIAL_NUMBER_CRC		0x8A
 
 class SHT31
 {
@@ -91,6 +91,7 @@ public:
   bool readData(bool fast = true);
 
   int getError();  //  clears error flag
+  bool getSerialNumber(uint32_t &serial, bool fast=true);
 
 protected:
   uint8_t  _address;

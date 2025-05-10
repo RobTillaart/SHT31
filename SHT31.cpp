@@ -25,6 +25,7 @@
 #define SHT31_HEAT_OFF          0x3066
 #define SHT31_HEATER_TIMEOUT    180000UL   //  milliseconds
 
+static constexpr uint16_t SHT31_GET_SERIAL_NUMBER = 0x3682;		//  no clock stretching
 
 SHT31::SHT31(uint8_t address, TwoWire *wire)
 {
@@ -281,6 +282,32 @@ int SHT31::getError()
   return rv;
 }
 
+/**
+ * See https://sensirion.com/media/documents/E5762713/63D103C2/Sensirion_electronic_identification_code_SHT3x.pdf
+ */
+bool SHT31::getSerialNumber(uint32_t &serial, bool fast) {
+  if (writeCmd(SHT31_GET_SERIAL_NUMBER) == false) {
+      return false;
+  }
+  delay(1);
+  uint8_t buffer[6];
+  if (readBytes(6, &buffer[0]) == false) {
+    return false;
+  }
+
+  if (!fast) {
+      if (buffer[2] != crc8(buffer, 2)) {
+      _error = SHT31_ERR_SERIAL_NUMBER_CRC;
+      return false;
+      }
+      if (buffer[5] != crc8(buffer + 3, 2)) {
+      _error = SHT31_ERR_SERIAL_NUMBER_CRC;
+      return false;
+      }
+  }
+  serial = (buffer[0] << 24) | (buffer[1] << 16) | (buffer[3] << 8) | buffer[4];
+  return true;
+}
 
 /////////////////////////////////////////////////////////////////
 //
